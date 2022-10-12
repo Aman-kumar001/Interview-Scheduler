@@ -123,6 +123,7 @@ const CreateInterView = ({
 			});
 		setStartTime(0);
 		setEndTime(0);
+		setInterviewDate('');
 		setParticipants([]);
 		// console.log(flag, 'flag here');
 	};
@@ -148,7 +149,10 @@ const CreateInterView = ({
 				console.log(res.data, 'other interviews');
 				setExistingInterviews(res.data);
 				for (var i = 0; i < res.data.length; i++) {
-					if (res.data[i].date == interviewDate) {
+					if (
+						res.data[i].date == interviewDate &&
+						interviewID != res.data[i]._id
+					) {
 						if (
 							(res.data[i].start_time <= startTime &&
 								startTime <= res.data[i].end_time) ||
