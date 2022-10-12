@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+.App {
+	margin: 0;
+	padding: 0;
+	color: rgb(113, 111, 111);
+	font-family: 'Poppins';
+}
+.viewAll {
+	margin: 0;
+	width: 80%;
+	margin: 2rem auto;
+	display: flex;
+	justify-content: center;
+	/* border: 1px solid black; */
+}
+.body {
+	margin: 2rem auto;
+	width: 80%;
+	/* border: 1px solid black; */
+	display: flex;
+	column-gap: 2rem;
+}
+.leftBody,
+.rightBody {
+	flex: 1;
+	padding: 0rem 2rem;
+	border-radius: 10px;
+	height: 70vh;
+	max-height: 70vh;
+	overflow: scroll;
+	/* border: 1px solid black; */
+}
+.leftBody {
+	box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.1);
+	padding: 2rem;
+	height: 62vh;
+}
+.rightBody {
+	border-left: 1px solid #91919130;
+	padding-bottom: 0;
+}
+
+@media (max-width<800) {
+	.body {
+		flex-direction: column;
+	}
+}

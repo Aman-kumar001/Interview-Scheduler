@@ -1,0 +1,22 @@
+.AllInterviews h1 {
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+.listItem {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	color: rgb(113, 111, 111);
+}
+.listItem div {
+	margin: 0;
+	flex: 1;
+	text-align: center;
+}
+.listItem p {
+	margin: 0;
+	color: #525050;
+}
