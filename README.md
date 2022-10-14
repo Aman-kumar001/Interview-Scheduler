@@ -1,6 +1,7 @@
 # Interview Scheduler
-In this i have used MERN stack.
-We have to create/schedule interviews such that a person should not be having multiple interviews or meetings at the same time or overlapping time intervals.
+A react app in which admin can schedule a meeting by selecting the participants, start time, end time and date of the meeting. The admin have create/schedule interviews such that a person should not be having multiple interviews or meetings at the same time or overlapping time intervals.
+
+In this I have used MERN stack.
 
 ## Steps to set-up
 #### 1. install node.js into the machine
