@@ -6,6 +6,7 @@ import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { useState } from 'react';
 import CreateIcon from '@mui/icons-material/Create';
 import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const AllInterviews = ({
 	allInterviews,
@@ -27,7 +28,7 @@ const AllInterviews = ({
 	//reminder function that will send a mail to the participants
 	const [expanded, setExpanded] = useState('');
 
-	// console.log(allInterviews);
+	console.log(allInterviews, 'all');
 
 	const handleChange = (panel) => (event, newExpanded) => {
 		setExpanded(newExpanded ? panel : false);
@@ -166,7 +167,9 @@ const AllInterviews = ({
 														}}
 													>
 														<p>{participantItem.name}</p>
-														<p>{participantItem.email}</p>
+														<p className='participantEmail'>
+															{participantItem.email}
+														</p>
 													</div>
 												);
 											}
@@ -176,6 +179,11 @@ const AllInterviews = ({
 							</div>
 						);
 					})}
+				{allInterviews.length == 0 && (
+					<div style={{ textAlign: 'center' }}>
+						<CircularProgress />
+					</div>
+				)}
 			</div>
 		</div>
 	);

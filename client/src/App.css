@@ -39,10 +39,17 @@
 .rightBody {
 	border-left: 1px solid #91919130;
 	padding-bottom: 0;
+	border-radius: 0;
 }
 
-@media (max-width<800) {
+@media (max-width: 960px) {
 	.body {
 		flex-direction: column;
+		row-gap: 2rem;
+	}
+	.rightBody {
+		border: none;
+		padding: 0;
+		overflow: visible;
 	}
 }

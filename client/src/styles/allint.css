@@ -20,3 +20,9 @@
 	margin: 0;
 	color: #525050;
 }
+@media (max-width: 960px) {
+	.participantEmail {
+		font-size: 0.8rem;
+		color: rgb(151, 151, 151);
+	}
+}
