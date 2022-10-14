@@ -1,4 +1,4 @@
-# Scaler Assingment (Interview Scheduler)
+# Interview Scheduler
 In this i have used MERN stack.
 We have to create/schedule interviews such that a person should not be having multiple interviews or meetings at the same time or overlapping time intervals.
 
