@@ -14,6 +14,8 @@ In this I have used MERN stack.
 #### 1. Scheduling an interview
 #### 2. Editing of an already scheduled interview
 #### 3. Deletion of a scheduled interview
+#### 4. Remainder Email to all the participants of an individual meeting can be sent.
+#### 5. Responsive UI design.
 
 
 
