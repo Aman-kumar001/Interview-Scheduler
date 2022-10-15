@@ -7,6 +7,8 @@ import { useState } from 'react';
 import CreateIcon from '@mui/icons-material/Create';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import SendNoti from '../functions/SendNoti';
 
 const AllInterviews = ({
 	allInterviews,
@@ -49,6 +51,7 @@ const AllInterviews = ({
 
 			<div className='interviewList'>
 				{allInterviews &&
+					//maping through the array to get all the items
 					allInterviews.map((item, index) => {
 						return (
 							<div key={index} style={{ marginBottom: '1rem' }}>
@@ -84,6 +87,11 @@ const AllInterviews = ({
 														justifyContent: 'right',
 													}}
 												>
+													<NotificationsActiveIcon
+														onClick={() => {
+															SendNoti(item);
+														}}
+													/>
 													<CreateIcon
 														onClick={() => {
 															setEndTime(item.end_time);
@@ -131,6 +139,7 @@ const AllInterviews = ({
 														style={{ fontSize: '0.72rem', color: '#52505099' }}
 													>
 														{item.start_time}
+														{item.start_time < '12:00' ? ' AM' : ' PM'}
 													</p>
 												</div>
 												<div>
@@ -139,6 +148,7 @@ const AllInterviews = ({
 														style={{ fontSize: '0.72rem', color: '#52505099' }}
 													>
 														{item.end_time}
+														{item.end_time < '12:00' ? ' AM' : ' PM'}
 													</p>
 												</div>
 												<div>
@@ -179,6 +189,7 @@ const AllInterviews = ({
 							</div>
 						);
 					})}
+				{/*appears when array is empty or when data is being fetched*/}
 				{allInterviews.length == 0 && (
 					<div style={{ textAlign: 'center' }}>
 						<CircularProgress />

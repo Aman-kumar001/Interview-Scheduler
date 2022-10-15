@@ -219,7 +219,7 @@ const CreateInterView = ({
 						Interview date
 					</label>
 					<input
-						style={{ width: 'auto' }}
+						style={{ width: '10rem' }}
 						type='date'
 						name='date'
 						id='date'
@@ -240,13 +240,14 @@ const CreateInterView = ({
 						Start time
 					</label>
 					<input
-						type='number'
+						type='time'
+						min='00:00'
+						max='23:59'
 						name='start'
 						id='start'
 						value={startTime}
-						min='0'
-						max='24'
 						onChange={(e) => {
+							console.log(e.target.value);
 							setStartTime(e.target.value);
 						}}
 					/>
@@ -259,13 +260,14 @@ const CreateInterView = ({
 						End time
 					</label>
 					<input
-						type='number'
+						type='time'
 						name='end'
 						id='end'
 						value={endTime}
 						min='0'
 						max='24'
 						onChange={(e) => {
+							console.log(e.target.value);
 							setEndTime(e.target.value);
 						}}
 					/>
@@ -334,10 +336,11 @@ const CreateInterView = ({
 								backgroundColor: `${!error ? '#3f51b5' : '#f44336'}`,
 							}}
 							onClick={() => {
+								console.log(startTime, endTime, 'time');
 								if (
 									participants.length >= 2 &&
 									interviewDate != '' &&
-									startTime < endTime
+									endTime > startTime
 								) {
 									//scheduling interview
 
@@ -347,11 +350,9 @@ const CreateInterView = ({
 									setError(true);
 									if (interviewDate == '') {
 										setDateError(true);
-									}
-									if (startTime >= endTime) {
+									} else if (startTime >= endTime) {
 										setTimeError(true);
-									}
-									if (participants.length < 2) {
+									} else if (participants.length < 2) {
 										setParticipantError(true);
 									}
 									setTimeout(() => {
@@ -391,7 +392,10 @@ const CreateInterView = ({
 					<p>Please more than 1 participant to schedule a meeting</p>
 				)}
 				{timeError && (
-					<p>Please check starting and ending time of the meeting</p>
+					<p>
+						Please check starting and ending time of the meeting. Your are not
+						allowed to schedule interday meetings.
+					</p>
 				)}
 				{dateError && <p>Select a date</p>}
 			</div>

@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "@material-ui/pickers": "^3.3.10",
     "@mui/x-date-pickers": "^5.0.4",
-    "emailjs": "^4.0.1"
+    "emailjs": "^4.0.1",
+    "emailjs-com": "^3.2.0"
   }
 }
