@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@mui/x-date-pickers": "^5.0.4",
+    "emailjs": "^4.0.1"
+  }
+}

@@ -46,6 +46,8 @@
 	.body {
 		flex-direction: column;
 		row-gap: 2rem;
+		height: auto;
+		max-height: auto;
 	}
 	.rightBody {
 		border: none;

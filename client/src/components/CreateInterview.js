@@ -26,11 +26,13 @@ const CreateInterView = ({
 	const [parList, setParList] = useState([]);
 	const [existingInterviews, setExistingInterviews] = useState([]);
 	const [emails, setEmails] = useState([]);
+	const [dateError, setDateError] = useState(false);
+	const [timeError, setTimeError] = useState(false);
+	const [participantError, setParticipantError] = useState(false);
+	const [error, setError] = useState(false);
 	const selectInputRef = useRef();
-	// const [flag, setFlag] = useState(false);
 
 	useEffect(() => {
-		//provides name and email of all the users to show in the dropdown menu
 		var temp = [];
 		if (users != undefined) {
 			// console.log(users);
@@ -48,9 +50,7 @@ const CreateInterView = ({
 	}, [users]);
 
 	const handleChange = (options) => {
-		//to get the participants for the interview
 		setParticipants(options);
-		// console.log(options, participants, 'options');
 		var temp = [];
 		var temp2 = [];
 		for (var i = 0; i < options.length; i++) {
@@ -61,10 +61,11 @@ const CreateInterView = ({
 			temp2.push(options[i].value);
 			temp.push(obj);
 		}
+		//storing participant list
 		setParList(temp);
+
+		//storing emails to fetch data accordingly
 		setEmails(temp2);
-		// console.log(temp2, 'emails');
-		// console.log(participants, parList, 'listto send');
 	};
 
 	var obj = [];
@@ -79,10 +80,8 @@ const CreateInterView = ({
 			end_time: `${endTime}`,
 			participants: parList,
 		};
-		//flag gets raised whenever there is a overlap in the scheduled time.
 		let flag = false;
 
-		//api to get all the interviews that contains selected candidates as participants
 		axios
 			.get('http://localhost:8000/api/interview/validateSlots', {
 				params: {
@@ -92,6 +91,8 @@ const CreateInterView = ({
 			.then((res) => {
 				console.log(res.data, 'other interviews');
 				setExistingInterviews(res.data);
+
+				//validation to prevent collisions
 				for (var i = 0; i < res.data.length; i++) {
 					if (res.data[i].date == interviewDate) {
 						if (
@@ -106,13 +107,14 @@ const CreateInterView = ({
 						}
 					}
 				}
-				console.log(flag, 'inside');
+
 				if (flag === false) {
 					// request to create new interview if it validates all the conditions
 					axios
 						.post('http://localhost:8000/api/interview', payLoad)
 						.then((res) => {
 							console.log(res.data);
+
 							setRefresh(!refresh);
 						});
 				} else {
@@ -125,7 +127,6 @@ const CreateInterView = ({
 		setEndTime(0);
 		setInterviewDate('');
 		setParticipants([]);
-		// console.log(flag, 'flag here');
 	};
 
 	//function runs when user tries to edit a schedule
@@ -185,17 +186,17 @@ const CreateInterView = ({
 		setParticipants([]);
 		setEdit(false);
 		setInterviewDate('');
-		// console.log(flag, 'flag here');
 	};
 
 	console.log(...participants, obj, 'participants');
 	return (
 		<div className='createContainer'>
 			<h1 className='leftHeading'>
+				{/*changing text accoring to the action*/}
 				{edit ? 'Change' : 'Schedule'} a interview
 			</h1>
 			<div className='member'>
-				<p>
+				<p style={{ color: `${participantError ? '#f44336' : ''}` }}>
 					{edit
 						? 'Make the required changes'
 						: 'Select the participants for the Interview'}
@@ -210,7 +211,13 @@ const CreateInterView = ({
 			</div>
 			<div className='time'>
 				<div>
-					<label htmlFor='date'>Interview date</label>
+					<label
+						htmlFor='date'
+						/*if there is some error we will change the colour of the label ot red*/
+						style={{ color: `${dateError ? '#f44336' : ''}` }}
+					>
+						Interview date
+					</label>
 					<input
 						style={{ width: 'auto' }}
 						type='date'
@@ -226,7 +233,12 @@ const CreateInterView = ({
 			</div>
 			<div className='time'>
 				<div>
-					<label htmlFor='starttime'>Start time</label>
+					<label
+						htmlFor='starttime'
+						style={{ color: `${timeError ? '#f44336' : ''}` }}
+					>
+						Start time
+					</label>
 					<input
 						type='number'
 						name='start'
@@ -235,13 +247,17 @@ const CreateInterView = ({
 						min='0'
 						max='24'
 						onChange={(e) => {
-							// console.log(e.target.value);
 							setStartTime(e.target.value);
 						}}
 					/>
 				</div>
 				<div>
-					<label htmlFor='endtime'>End time</label>
+					<label
+						htmlFor='endtime'
+						style={{ color: `${timeError ? '#f44336' : ''}` }}
+					>
+						End time
+					</label>
 					<input
 						type='number'
 						name='end'
@@ -257,34 +273,127 @@ const CreateInterView = ({
 			</div>
 
 			<div className='scheduleButton'>
-				<Button
-					variant='contained'
-					color='primary'
-					style={{ width: '100%', margin: 'auto' }}
-					onClick={() => {
-						if (
-							participants.length >= 2 &&
-							interviewDate != '' &&
-							startTime < endTime
-						) {
-							//scheduling interview
-							if (!edit) {
+				{!edit && (
+					<Button
+						variant='contained'
+						style={{
+							width: '100%',
+							margin: 'auto',
+							color: 'white',
+							backgroundColor: `${!error ? '#3f51b5' : '#f44336'}`,
+						}}
+						onClick={() => {
+							if (
+								participants.length >= 2 &&
+								interviewDate != '' &&
+								startTime < endTime
+							) {
+								//scheduling interview
+
 								scheduleInterview();
 								selectInputRef.current.select.clearValue();
 								console.log('creating');
 							} else {
-								editSchedule();
-								selectInputRef.current.select.clearValue();
+								setError(true);
+								if (interviewDate == '') {
+									setDateError(true);
+								}
+								if (startTime >= endTime) {
+									setTimeError(true);
+								}
+								if (participants.length < 2) {
+									setParticipantError(true);
+								}
+								setTimeout(() => {
+									setDateError(false);
+									setTimeError(false);
+									setParticipantError(false);
+									setError(false);
+								}, 1500);
 							}
-						} else {
-							alert(
-								'please select atleast 2 participants with all valid fields'
-							);
-						}
-					}}
-				>
-					{!edit ? 'Schedule' : 'Confirm'}
-				</Button>
+						}}
+					>
+						Schedule
+					</Button>
+				)}
+				{edit && (
+					<div
+						style={{
+							width: '100%',
+							columnGap: '2rem',
+							display: 'flex',
+							flexDirection: 'row',
+						}}
+					>
+						<Button
+							variant='contained'
+							style={{
+								flex: '1',
+								margin: 'auto',
+								color: 'white',
+								backgroundColor: `${!error ? '#3f51b5' : '#f44336'}`,
+							}}
+							onClick={() => {
+								if (
+									participants.length >= 2 &&
+									interviewDate != '' &&
+									startTime < endTime
+								) {
+									//scheduling interview
+
+									editSchedule();
+									selectInputRef.current.select.clearValue();
+								} else {
+									setError(true);
+									if (interviewDate == '') {
+										setDateError(true);
+									}
+									if (startTime >= endTime) {
+										setTimeError(true);
+									}
+									if (participants.length < 2) {
+										setParticipantError(true);
+									}
+									setTimeout(() => {
+										setDateError(false);
+										setTimeError(false);
+										setParticipantError(false);
+										setError(false);
+									}, 1500);
+								}
+							}}
+						>
+							Confirm
+						</Button>
+						<Button
+							variant='contained'
+							style={{
+								flex: '1',
+								margin: 'auto',
+								color: 'white',
+								backgroundColor: 'gray',
+							}}
+							onClick={() => {
+								setStartTime(0);
+								setEndTime(0);
+								setParticipants([]);
+								setEdit(false);
+								setInterviewDate('');
+							}}
+						>
+							cancel
+						</Button>
+					</div>
+				)}
+			</div>
+			<div style={{ textAlign: 'center' }}>
+				{participantError && (
+					<p>Please more than 1 participant to schedule a meeting</p>
+				)}
+				{timeError && (
+					<p>Please check starting and ending time of the meeting</p>
+				)}
+				{dateError && <p>Select a date</p>}
 			</div>
 		</div>
 	);
